@@ -48,7 +48,7 @@ if( $run_cron && empty($alert_id) ) {
 
         // `php handler.php $id > logs/log$id.txt &`;
         // `php handler.php $id > /dev/null &`;
-        `php index.php 0 $id > /dev/null &`;
+        `php index.php 0 $id > /dev/null &`; # Here is where all the magic happens ;)
 
     }
 
