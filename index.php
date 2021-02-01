@@ -35,7 +35,7 @@ if( $run_cron && empty($alert_id) ) {
     $max_processes      = (int)(`ulimit -u`);
 
     # Getting up to 60% of max num of available processes from current user
-    $bi_alerts          = ceil( ($max_processes - $running_processes) * .3 );
+    $bi_alerts          = ceil( ($max_processes - $running_processes) * .1 );
 
     echo "$bi_alerts alerts to be processed.\n";
 
@@ -47,7 +47,8 @@ if( $run_cron && empty($alert_id) ) {
         $id = $i . '_' . time();
 
         // `php handler.php $id > logs/log$id.txt &`;
-        `php index.php 0 $id > /dev/null &`;
+        // `php handler.php $id > /dev/null &`;
+        `php index.php 0 $id > /dev/null &`; # Here is where all the magic happens ;)
 
     }
 
