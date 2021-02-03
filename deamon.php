@@ -17,10 +17,11 @@ do {
         if( $elapsed_time >= $max_elapsed_time ){
             
             `kill $pid`;
-            unset($instances[$index]);
-
+            
             # Not required. Just for debugging purpose
             `echo 'Process PID:$pid was killed due max running time of $max_elapsed_time secs. Internal ID: $instance[8].' >> logs/log.txt`;
+            
+            unset($instances[$index]);
             
         }
 
