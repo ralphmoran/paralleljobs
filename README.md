@@ -10,7 +10,7 @@ for( $i = 0; $i < 10; $i++ ){
     $id = $i . '_' . time();
 
     # The amp "&" char at the end makes the magic here ;)
-    `php async_process.php $id > /dev/null &`; 
+    `php async_process.php {$id} > /dev/null &`; 
 }
 ```
 
