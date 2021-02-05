@@ -1,7 +1,7 @@
 # Parallel jobs - Async process
 Vanilla #PHP does not support #asynchronous #jobs or #multitask processes. Here I explain how you can achieve it when you run your script on a Unix/Linux OS.
 
-The use of backticks (`) in your PHP script is not recommended because they make your code less portable but there are many options to "make" it portable, like building a VirtualBox and defining the best Linux distro for your case where your code is going to run on, that way your code is 100% compatible and portable.
+The use of backticks (`) in your PHP script is not recommended because they make your code less portable but there are many options to "achieve" that feature, like building a VirtualBox and defining the best Linux distro for your needs where your code is going to run on, that way, your code can accomplish it.
 
 
 ## How to make async instances of a PHP script
