@@ -14,6 +14,9 @@ do {
         $pid            = $instance[1];
         $elapsed_time   = getElapsedTimeFromPID( $pid );
 
+        if( empty( trim($elapsed_time) ) )
+            unset($instances[$index]);
+
         if( $elapsed_time >= $max_elapsed_time ){
             
             `kill $pid`;
