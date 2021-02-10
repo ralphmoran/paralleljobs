@@ -25,6 +25,8 @@ function getInstancesOf( $file ) : array
 {
     # Get all running Unix/Linux instances of "$file"
     $instances = `ps -wef | grep "{$file}"`;
+    // $instances = `ps -w | grep "{$file}"`;
+    // $instances = `ps -e | grep "{$file}"`;
 
     # Format list of instances
     $list_instances = explode( "\n", $instances );

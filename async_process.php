@@ -1,6 +1,6 @@
 <?php
 
-$secs = mt_rand(1, 120);
+$secs = mt_rand(1, 60);
 
 `echo 'Processing data for #job({$argv[1]}): sleep({$secs})...' >> logs/log.txt`;
 
