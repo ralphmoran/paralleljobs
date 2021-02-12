@@ -6,8 +6,10 @@
 $running_processes  = (int)(`ps -e | wc -l`);
 $max_processes      = (int)(`ulimit -u`);
 
+$kernel_call_async_processes    = "";
+
 # Getting up to 10% of max num of available processes from current user
-$available_async_processes = ceil( ($max_processes - $running_processes) * .6 );
+$available_async_processes = ceil( ($max_processes - $running_processes) * .8 );
 
 echo "$available_async_processes alerts to be processed.\n";
 
@@ -22,8 +24,11 @@ for( $i = 0; $i <= $available_async_processes; $i++ ){
     $id = $i . '_' . time();
 
     # The amp "&" char at the end makes the magic here ;)
-    `php async_process.php $id > /dev/null &`; 
+    $kernel_call_async_processes .= "php async_process.php $id > /dev/null &"; 
 }
+
+# Make the kernel call
+`$kernel_call_async_processes`;
 
 $end_time = time();
 
