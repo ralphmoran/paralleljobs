@@ -59,27 +59,27 @@ function getElapsedTimeFromPID( int $pid )
 
     # It's been running for less than an hour: 59:59...
     if( strlen( $pid_elapsed_time ) < 6 )
-        return convertTimeToSeconds( '00:' . $pid_elapsed_time );
+        return getDiffTime( '00:' . $pid_elapsed_time );
 
     # for more than or equal an hour: 01:00:00...
     if( strlen( $pid_elapsed_time ) < 9 )
-        return convertTimeToSeconds( $pid_elapsed_time );
+        return getDiffTime( $pid_elapsed_time );
 
     # for more than a day: 04-05:33:59 - 4 days, 5 hours, 33 mins and 59 secs
     if( strpos( $pid_elapsed_time, '-' ) !== false ){
         $elapsed = explode( '-', $pid_elapsed_time );
-        return ((int) $elapsed[0] * 86400) + convertTimeToSeconds( trim($elapsed[1]) );
+        return ((int) $elapsed[0] * 86400) + getDiffTime( trim($elapsed[1]) );
     }
 
 }
 
 /**
- * Converts Unix timestamp to seconds.
+ * Returns the diff of seconds from a given $time against today.
  *
  * @param string $time
  * @return int
  */
-function convertTimeToSeconds( string $time ) : int
+function getDiffTime( string $time ) : int
 {
     return strtotime($time) - strtotime('TODAY');
 }
