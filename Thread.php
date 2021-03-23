@@ -10,6 +10,7 @@ $start = microtime(true);
         one set for the group and 
         one set for others.
     2. Make it distribuited: "Search if this script is running on remote machines"
+    https://www.php.net/manual/en/function.tmpfile.php
  */
 
 /**
@@ -60,17 +61,15 @@ final class Thread
         6. Work on memory efficiency: heavy arrays... Use generators
     */
 
-    public function __construct( ...$args ) // $thread_group = '' )
+    public function __construct( ...$args )
     {
         $this->parseArgs( $args );
 
         $this->current_os = ( substr( php_uname(), 0, 3 ) == "Win" ) ? self::WIN_OS_LABEL : self::NIX_OS_LABEL;
 
-        # Set thread group label
         if( ! empty( $args['thread_group'] ) && is_string( $args['thread_group'] ) )
             $this->setThreadKeyword( $args['thread_group'] );
 
-        # Set executables
         if( ! empty( $args['execs'] ) && is_array( $args['execs'] ) )
             $this->setExecutables( $args['execs'] );
     }
