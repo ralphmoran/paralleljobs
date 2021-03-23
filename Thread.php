@@ -60,12 +60,19 @@ final class Thread
         6. Work on memory efficiency: heavy arrays... Use generators
     */
 
-    public function __construct( $thread_group = '' )
+    public function __construct( ...$args ) // $thread_group = '' )
     {
+        $this->parseArgs( $args );
+
         $this->current_os = ( substr( php_uname(), 0, 3 ) == "Win" ) ? self::WIN_OS_LABEL : self::NIX_OS_LABEL;
 
-        if( ! empty( $thread_group ) && is_string( $thread_group ) )
-            $this->setThreadKeyword( $thread_group );
+        # Set thread group label
+        if( ! empty( $args['thread_group'] ) && is_string( $args['thread_group'] ) )
+            $this->setThreadKeyword( $args['thread_group'] );
+
+        # Set executables
+        if( ! empty( $args['execs'] ) && is_array( $args['execs'] ) )
+            $this->setExecutables( $args['execs'] );
     }
 
 
@@ -389,7 +396,7 @@ final class Thread
         $formatted_thread = '';
 
         $body    = $thread[0];
-        $command = ( ( isset( $thread[1] ) && in_array( $thread[1], $this->executables ) ) ? $thread[1] : 'php --no-php-ini' );
+        $command = ( ( isset( $thread[1] ) && in_array( $thread[1], $this->getExecutables() ) ) ? $thread[1] : 'php --no-php-ini' );
         $append  = ( ( isset( $thread[2] ) && in_array( $thread[2], $this->output_operators ) ) ? $thread[2] : '>' );
         $output  = ( ( isset( $thread[3] ) && in_array( $thread[3], $this->output_endpoints ) ) ? $thread[3] : self::WIN_DEFAULT_OUTPUT );
         $thread_hash = $this->getThreadHash();
@@ -572,6 +579,44 @@ final class Thread
     }
 
 
+    /**
+     * Parses by reference the splat-operator array on constructor.
+     *
+     * @param array &$args
+     * @return void
+     */
+    private function parseArgs( array &$args )
+    {
+        $args = $args[0];
+    }
+
+
+    /**
+     * Returns valid executables.
+     *
+     * @return array
+     */
+    private function getExecutables() : array
+    {
+        return $this->executables;
+    }
+
+
+    /**
+     * Defines/assings valid executables.
+     *
+     * @param array $executables
+     * @return Thread
+     */
+    public function setExecutables( array $executables ) : Thread
+    {
+        if( ! empty( $executables ) )
+            $this->executables = $executables;
+
+        return $this;
+    }
+
+
     public function dd( $msg, $exit = true )
     {
         print_r( $msg );
@@ -583,7 +628,10 @@ final class Thread
 
 
 
-$thread = new Thread('spx'); # 'spx' is a general group label
+$thread = new Thread([
+        'thread_group' => 'spx', # 'spx' is a general group label
+        'execs'        => [] # It overwrites, when it's not empty, the default execs. By default, there is just one: php
+    ]);
 
 $thread->dispatch( 'async_process.php single_command_default_group' );
 
