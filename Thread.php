@@ -108,11 +108,8 @@ final class Thread
             if( ! empty( $hash ) && ! in_array( $hash, array_values( array_column( $this->getRunningThreads(), 'hash' ) ) ) )
                 $this->dispatch( $hash );
 
-        $this->updateRegisteredThreads();
-
-        $this->setThreadKeyword('');
-
-        return $this;
+        return $this->updateRegisteredThreads()
+                ->setThreadKeyword('');
     }
 
 
@@ -128,12 +125,8 @@ final class Thread
             return $this;
 
         if( is_array( $thread_hash ) )
-        {
-            $this->register( $thread_hash )
+            return $this->register( $thread_hash )
                 ->dispatchAll();
-            
-            return $this;
-        }
 
         if( isset( $this->getRegisteredThreads()[ $thread_hash ] ) )
         {
@@ -144,8 +137,8 @@ final class Thread
 
         $thread_hash = $this->formatThread( [ $thread_hash ] );
 
-        $this->registerThread( $thread_hash );
-        $this->sendToKernel( $thread_hash[ 'body' ] );
+        $this->registerThread( $thread_hash )
+                ->sendToKernel( $thread_hash[ 'body' ] );
 
         return $this;
     }
@@ -305,9 +298,7 @@ final class Thread
      */
     public function group( $group )
     {
-        $this->setThreadKeyword( $group );
-
-        return $this;
+        return $this->setThreadKeyword( $group );
     }
 
 
@@ -344,14 +335,13 @@ final class Thread
      * Sets a thread keyword.
      *
      * @param string $keyword
-     * @return void
+     * @return Thread
      */
     private function setThreadKeyword( $keyword )
     {
-        // if( empty( $keyword ) )
-        //     return false;
-
         $this->thread_keyword = self::THREAD_PREPEND . ( $keyword ?: '' );
+
+        return $this;
     }
 
 
@@ -425,12 +415,14 @@ final class Thread
      * Registers a thread in a global array within object scope.
      *
      * @param array $thread
-     * @return void
+     * @return Thread
      */
     private function registerThread( array $thread )
     {
         if( ! in_array( $thread['body'], array_column( $this->registered_threads, 'body' ) ) )
             $this->registered_threads[ $this->getThreadHash() ] = $thread;
+
+        return $this;
     }
 
 
@@ -496,6 +488,8 @@ final class Thread
         */
         # WIN OS
         @pclose( @popen( "start /B " . $command, "r" ) );
+
+        return $this;
     }
 
 
@@ -526,7 +520,6 @@ final class Thread
             list( $days, $hh_mm_ss ) = explode( '-', $elapsed_time );
             return ( (int) $days * 86400) + $this->getDiffTime( trim($hh_mm_ss) );
         }
-
     }
 
 
