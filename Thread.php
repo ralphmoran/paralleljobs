@@ -54,8 +54,8 @@ final class Thread
     /*
         TODO:
 
-        1. Return running processes
-        2. Return elapsed time from a process
+        - 1. Return running processes
+        - 2. Return elapsed time from a process
         - 3. Add a hash key to each thread for internal control
         5. Fix output_endpoints to accept custom ones
         6. Work on memory efficiency: heavy arrays... Use generators
@@ -67,8 +67,8 @@ final class Thread
 
         $this->current_os = ( substr( php_uname(), 0, 3 ) == "Win" ) ? self::WIN_OS_LABEL : self::NIX_OS_LABEL;
 
-        if( ! empty( $args['thread_group'] ) && is_string( $args['thread_group'] ) )
-            $this->setThreadKeyword( $args['thread_group'] );
+        if( ! empty( $args['group'] ) && is_string( $args['group'] ) )
+            $this->setThreadKeyword( $args['group'] );
 
         if( ! empty( $args['execs'] ) && is_array( $args['execs'] ) )
             $this->setExecutables( $args['execs'] );
@@ -81,7 +81,7 @@ final class Thread
      * @param array $threads
      * @return Thread
      */
-    public function register( $threads = [] )
+    public function register( $threads = [] ) : Thread
     {
         if( is_array( $threads ) )
         {
@@ -108,14 +108,14 @@ final class Thread
      *
      * @return Thread
      */
-    public function dispatchAll()
+    public function dispatchAll() : Thread
     {
         foreach( $this->getRegisteredThreads() as $hash => $t )
             if( ! empty( $hash ) && ! in_array( $hash, array_values( array_column( $this->getRunningThreads(), 'hash' ) ) ) )
                 $this->dispatch( $hash );
 
         return $this->updateRegisteredThreads()
-                ->setThreadKeyword('');
+                    ->setThreadKeyword('');
     }
 
 
@@ -125,14 +125,14 @@ final class Thread
      * @param string $thread_hash
      * @return Thread
      */
-    public function dispatch( $thread_hash )
+    public function dispatch( $thread_hash ) : Thread
     {
         if( empty( $thread_hash ) )
             return $this;
 
         if( is_array( $thread_hash ) )
             return $this->register( $thread_hash )
-                ->dispatchAll();
+                        ->dispatchAll();
 
         if( isset( $this->getRegisteredThreads()[ $thread_hash ] ) )
         {
@@ -176,7 +176,7 @@ final class Thread
      *
      * @return array
      */
-    public function getRegisteredThreads()
+    public function getRegisteredThreads() : array
     {
         $this->updateRegisteredThreads();
 
@@ -258,9 +258,9 @@ final class Thread
      * Kills a thread by its PID
      *
      * @param string $hash
-     * @return mixed
+     * @return Thread
      */
-    public function kill( $hash )
+    public function kill( $hash ) : Thread
     {
         $pid = $this->registered_threads[ $hash ][ 'pid' ];
 
@@ -283,7 +283,7 @@ final class Thread
      *
      * @return Thread
      */
-    public function killAll( $group = '' )
+    public function killAll( $group = '' ) : Thread
     {
         $pids_to_kill = '';
 
@@ -302,7 +302,7 @@ final class Thread
      * @param string $group
      * @return Thread
      */
-    public function group( $group )
+    public function group( $group ) : Thread
     {
         return $this->setThreadKeyword( $group );
     }
@@ -313,7 +313,7 @@ final class Thread
      *
      * @return Thread
      */
-    private function updateRegisteredThreads()
+    private function updateRegisteredThreads() : Thread
     {
         foreach( $this->getRunningThreads() as $thread )
         {
@@ -329,9 +329,9 @@ final class Thread
     /**
      * Returns the OS flag. For now it can be NIX or WIN.
      *
-     * @return void
+     * @return string
      */
-    private function getOS()
+    private function getOS() : string
     {
         return $this->current_os;
     }
@@ -343,7 +343,7 @@ final class Thread
      * @param string $keyword
      * @return Thread
      */
-    private function setThreadKeyword( $keyword )
+    private function setThreadKeyword( $keyword ) : Thread
     {
         $this->thread_keyword = self::THREAD_PREPEND . ( $keyword ?: '' );
 
@@ -423,7 +423,7 @@ final class Thread
      * @param array $thread
      * @return Thread
      */
-    private function registerThread( array $thread )
+    private function registerThread( array $thread ) : Thread
     {
         if( ! in_array( $thread['body'], array_column( $this->registered_threads, 'body' ) ) )
             $this->registered_threads[ $this->getThreadHash() ] = $thread;
@@ -557,7 +557,7 @@ final class Thread
      *
      * @param string $a
      * @param string $delimiter
-     * @return 
+     * @return void
      */
     private function explodeAndClean( string &$a, string $delimiter )
     {
@@ -628,8 +628,8 @@ final class Thread
 
 
 $thread = new Thread([
-        'thread_group' => 'spx', # 'spx' is a general group label
-        'execs'        => [] # It overwrites, when it's not empty, the default execs. By default, there is just one: php
+        'group' => 'spx', # 'spx' is a general group label
+        'execs' => [] # It overwrites, when it's not empty, the default execs. By default, there is just one: php
     ]);
 
 $thread->dispatch( 'async_process.php single_command_default_group' );
