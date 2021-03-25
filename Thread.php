@@ -239,7 +239,7 @@ final class Thread
      */
     public function find( $threads ) : array
     {
-        $instances = $this->sendToKernel( "ps -ro pid,etime,command | grep -E '$threads' | grep -v grep" );
+        $instances = $this->sendToKernel( "ps -ro pid,etime,command | grep -E '$threads' | grep -E '" . self::THREAD_PREPEND . "' | grep -v grep" );
 
         if( empty( $instances ) ) 
             return [];
