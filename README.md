@@ -81,21 +81,21 @@ $thread->dispatchAll(); # Calling dispatch() or dispatchAll() will blank group n
 
 ```php
 #-----------------------------------------------------------------
-# Get all registered threads
+# Get all registered threads created by Thread class
 print_r( $thread->getRegisteredThreads() );
 ```
 
-### Get all running threads or by group, word
+### Get all running threads or by group or word
 
 ```php
 #-----------------------------------------------------------------
-# Get ONLY running threads by group or word
+# Get ONLY running threads by group or word created by Thread class
 $thread->getRunningThreads('spx');
 $thread->getRunningThreads('g1');
 $thread->getRunningThreads('g2');
 $thread->getRunningThreads('g3');
 
-# Get ONLY all running threads
+# Get ONLY all running threads created by Thread class
 $thread->getRunningThreads();
 ```
 
@@ -103,13 +103,13 @@ $thread->getRunningThreads();
 
 ```php
 #-----------------------------------------------------------------
-# Kill threads by groups or word
+# Kill threads by groups or word created by Thread class
 $thread->killAll('spx');
 $thread->killAll('g1');
 $thread->killAll('g2');
 $thread->killAll('g3');
 
-# Kill all threads
+# Kill all threads created by Thread class
 $thread->killAll();
 ```
 
