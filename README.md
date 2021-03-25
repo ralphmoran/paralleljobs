@@ -95,7 +95,7 @@ $thread->getRunningThreads('g1');
 $thread->getRunningThreads('g2');
 $thread->getRunningThreads('g3');
 
-# Get ONLY al running threads
+# Get ONLY all running threads
 $thread->getRunningThreads();
 ```
 
