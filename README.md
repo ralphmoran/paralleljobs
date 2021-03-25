@@ -12,7 +12,10 @@ $thread = new Thread(); # Default thread group is assigned
 
 or 
 
-$thread = new Thread('spx'); # 'spx' is now the general group label
+$thread = new Thread([
+        'group' => 'spx', # 'spx' is a general group label
+        'execs' => [] # It overwrites, when it's not empty, the default execs. By default, there is just one: php
+    ]);
 ```
 
 ### Dispatching a single thread (default group)
